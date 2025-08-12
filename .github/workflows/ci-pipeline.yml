@@ -35,7 +35,9 @@ jobs:
           load: true
 
       - name: Run tests in container
-        run: docker run --name test-container api-tests | tee test-output.log
+        run: |
+          docker run --name test-container api-tests
+          docker cp test-container:/tmp/17279890032079692072/allure-report ./allure-report
 
       - name: Copy Allure results from container
         run: docker cp test-container:/app/target/allure-results ./allure-results

@@ -14,11 +14,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-docker-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-docker-
+
       - name: Build Docker image
-        run: docker build -t api-tests .
+        run: |
+          docker build \
+            --cache-from=type=local,src=/tmp/.buildx-cache \
+            --cache-to=type=local,dest=/tmp/.buildx-cache \
+            -t api-tests .
 
       - name: Run tests in container
-        run: docker run --name test-container api-tests
+        run: docker run --name test-container api-tests | tee test-output.log
 
       - name: Copy Allure results from container
         run: docker cp test-container:/app/target/allure-results ./allure-results

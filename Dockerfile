@@ -14,6 +14,9 @@ WORKDIR /app
 # Copy project files
 COPY . /app
 
+# Cache dependencies
+RUN mvn dependency:go-offline
+
 # Expose the port used by Allure's Jetty server
 EXPOSE 8080
 

@@ -1,6 +1,6 @@
-# 🧪 Test Automation Framework
+# Test Automation Framework
 
-This project is a Java-based Cucumber test automation framework using **Maven**, **Cucumber**, and **Allure** for reporting. It supports execution inside **Docker** and integrates with **GitHub Actions** for CI/CD.
+This project is a Java-based test automation framework using **Maven**, **Cucumber**, **RestAssured** and **Allure** for reporting. It supports execution inside **Docker** and integrates with **GitHub Actions** for CI/CD.
 
 ---
 
@@ -22,12 +22,17 @@ Make sure you have the following installed:
 - [Java 17+](https://adoptopenjdk.net/)
 - [Maven](https://maven.apache.org/)
 - [Docker](https://www.docker.com/)
-- (Optional) [Allure CLI](https://docs.qameta.io/allure/#_installing_a_commandline)
+- [Allure CLI](https://docs.qameta.io/allure/#_installing_a_commandline) (Optional)
 
 ---
-### 2. Clone the Repository
 
-## 📦 Project Structure
+### 2. Clone the Repository
+```bash
+git clone https://github.com/Bozhidara-A/API_Framework_Online_Bookstore.git
+```
+
+---
+### 📦 Project Structure
 
 ```
 .
@@ -59,34 +64,50 @@ target/allure-results/
 ### Generate Allure Report (Optional)
 
 ```bash
-allure serve target/allure-results
+mvn allure serve 
 ```
-
-Or generate static HTML:
-
+---
+### Running the tests with configurations
+-  Using Command-Line Argument
 ```bash
-allure generate target/allure-results -o target/allure-report
-allure open target/allure-report
+mvn test -Dbase.url=https://api.staging.example.com
 ```
-
+- Using Environment Variable
+```bash
+BASE_URL=https://api.prod.example.com mvn test
+```
 ---
 
 ## 🐳 Running Tests in Docker
 
-1. Build Docker Image
+### 1. Build Docker Image
 
 ```bash
-docker build -t test-runner .
+docker build -t test-suite .
 ```
 
-2. Run Tests in Container
+### 2. Run Tests in Container
 
 ```bash
-docker run --p 8080:8080 test-runner
+docker run --p 8080:8080 test-suite
 ```
 
-3. Open report
-   http://localhost:8080/
+### 3. Open report
+   Open http://localhost:8080/
+
+---
+### Running the tests with configurations
+-  Using Command-Line Argument
+```bash
+docker run test-suite mvn test -Dbase.url=https://api.example.com
+```
+- Using Environment Variable
+```bash
+docker run -e BASE_URL=https://api.example.com test-suite
+```
+---
+
+---
 
 ## 🔁 CI/CD with GitHub Actions
 

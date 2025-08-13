@@ -52,5 +52,23 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: allure-report
 
+      - name: Write dynamic test summary
+        run: |
+          echo "## Test Summary" >> $GITHUB_STEP_SUMMARY
+
+          # Parse Surefire XML files
+          PASSED=$(grep -oP 'testsuite.*tests="\K[0-9]+' target/surefire-reports/TEST-*.xml | paste -sd+ | bc)
+          FAILURES=$(grep -oP 'testsuite.*failures="\K[0-9]+' target/surefire-reports/TEST-*.xml | paste -sd+ | bc)
+          ERRORS=$(grep -oP 'testsuite.*errors="\K[0-9]+' target/surefire-reports/TEST-*.xml | paste -sd+ | bc)
+          SKIPPED=$(grep -oP 'testsuite.*skipped="\K[0-9]+' target/surefire-reports/TEST-*.xml | paste -sd+ | bc)
+          TIME=$(grep -oP 'testsuite.*time="\K[0-9.]+' target/surefire-reports/TEST-*.xml | paste -sd+ | bc)
+
+          echo "- ✅ Passed: $((PASSED - FAILURES - ERRORS - SKIPPED))" >> $GITHUB_STEP_SUMMARY
+          echo "- ❌ Failed: $((FAILURES + ERRORS))" >> $GITHUB_STEP_SUMMARY
+          echo "- ⚠️ Skipped: $SKIPPED" >> $GITHUB_STEP_SUMMARY
+          echo "- ⏱️ Duration: ${TIME}s" >> $GITHUB_STEP_SUMMARY
+          echo "- 📊 [View Allure Report](https://bozhidara-a.github.io/API_Framework_Online_Bookstore/)" >> $GITHUB_STEP_SUMMARY
+
+
       - name: Cleanup Docker container
         run: docker rm test-container

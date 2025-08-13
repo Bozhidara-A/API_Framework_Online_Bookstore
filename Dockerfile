@@ -18,4 +18,4 @@ COPY . /app
 RUN mvn dependency:go-offline
 
 # Default command: run tests and generate report
-CMD mvn clean test && allure generate target/allure-results -o target/allure-report
+CMD mvn clean test || true && allure generate target/allure-results -o target/allure-report

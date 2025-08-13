@@ -1,4 +1,4 @@
-package com.avenga.stepDefinitions;
+package stepDefinitions;
 
 import com.avenga.api.BooksAPI;
 import com.avenga.cucumber.TestContext;
@@ -6,9 +6,10 @@ import com.avenga.models.Book;
 
 import io.cucumber.java.en.*;
 import io.restassured.response.Response;
+
 import static org.junit.Assert.*;
 
-public class BooksSteps extends BaseSteps{
+public class BooksSteps extends BaseSteps {
 
     private static Response response;
     private final BooksAPI booksAPI = new BooksAPI();
@@ -17,7 +18,7 @@ public class BooksSteps extends BaseSteps{
         super(testContext);
     }
 
-    public static void verifyBookFields(Book book) {
+    protected static void verifyBookFields(Book book) {
         assertNotNull("Book ID is missing.", book.id);
         assertNotNull("Title is missing.", book.title);
         assertNotNull("Description is missing.", book.description);
@@ -27,7 +28,7 @@ public class BooksSteps extends BaseSteps{
         assertNotNull("Publish date is missing.", book.publishDate);
     }
 
-    public void verifyBookFieldsValues(Book book, Long expectedId, String expectedTitle, String expectedDescription, Long expectedPageCount, String expectedExcerpt, String expectedPublishDate) {
+    protected void verifyBookFieldsValues(Book book, Long expectedId, String expectedTitle, String expectedDescription, Long expectedPageCount, String expectedExcerpt, String expectedPublishDate) {
         assertEquals("Book ID value mismatch.", book.id, expectedId);
         assertEquals("Title value mismatch.", book.title, expectedTitle);
         assertEquals("Description value mismatch.", book.description, expectedDescription);
@@ -36,14 +37,21 @@ public class BooksSteps extends BaseSteps{
         assertEquals("Publish value mismatch.", book.publishDate, expectedPublishDate);
     }
 
+    protected Response createBookWithDefaultData(Long id) {
+        Book bookRequest = new Book(id, "Book Title", "Book description", 250L, "Book excerpt", "2025-04-03T00:00:00");
+        response = booksAPI.createBook(request, bookRequest);
+        getScenarioContext().setResponse(response);
+        return response;
+    }
+
     @When("I retrieve all books")
     public void retrieveAllBooks() {
         response = booksAPI.getAllBooks(request);
         getScenarioContext().setResponse(response);
     }
 
-    @When("I retrieve the book with ID: {int}")
-    public void getBookById(int id) {
+    @When("I retrieve the book with ID: {long}")
+    public void getBookById(Long id) {
         response = booksAPI.getBookById(request, id);
         getScenarioContext().setResponse(response);
     }
@@ -72,5 +80,21 @@ public class BooksSteps extends BaseSteps{
     public void verifyBook(Long id, String title, String description, Long pageCount, String excerpt, String publishDate) {
         Book book = response.as(Book.class);
         verifyBookFieldsValues(book, id, title, description, pageCount, excerpt, publishDate);
+    }
+
+    @Given("^a book with ID (\\d+) (does not exist|exists)")
+    public void verifyBookExistence(Long id, String exists) {
+        response = booksAPI.getBookById(request, id);
+        if (exists.equals("exists")) {
+            if (response.getStatusCode() != 200) {
+                response = createBookWithDefaultData(id);
+                CommonApiSteps.verifyResponseStatusCode(response, 200);
+            }
+        } else if (exists.equals("does not exist")) {
+            if (response.getStatusCode() == 200) {
+                response = booksAPI.deleteBookById(request, id);
+                CommonApiSteps.verifyResponseStatusCode(response, 200);
+            }
+        }
     }
 }

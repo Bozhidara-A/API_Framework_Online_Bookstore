@@ -1,4 +1,4 @@
-package com.avenga.stepDefinitions;
+package stepDefinitions;
 
 import com.avenga.api.AuthorsAPI;
 import com.avenga.cucumber.TestContext;
@@ -14,22 +14,29 @@ public class AuthorsSteps extends BaseSteps {
     private static Response response;
     private final AuthorsAPI authorsAPI = new AuthorsAPI();
 
-    public static void verifyAuthorFields(Author author) {
+    public AuthorsSteps(TestContext testContext) {
+        super(testContext);
+    }
+
+    protected static void verifyAuthorFields(Author author) {
         assertNotNull("Author ID is missing.", author.id);
         assertNotNull("Book ID is missing.", author.idBook);
         assertNotNull("First name is missing.", author.firstName);
         assertNotNull("Last name is missing.", author.lastName);
     }
 
-    public void verifyAuthorFieldsValues(Author author, Long expectedId, Long expectedBookId, String expectedFirstName, String expectedLastName) {
+    protected void verifyAuthorFieldsValues(Author author, Long expectedId, Long expectedBookId, String expectedFirstName, String expectedLastName) {
         assertEquals("Author ID value mismatch.", author.id, expectedId);
         assertEquals("Book ID value mismatch.", author.idBook, expectedBookId);
         assertEquals("First name value mismatch.", author.firstName, expectedFirstName);
         assertEquals("Last name mismatch.", author.lastName, expectedLastName);
     }
 
-    public AuthorsSteps(TestContext testContext) {
-        super(testContext);
+    protected Response createAuthorWithDefaultData(Long id) {
+        Author authorRequest = new Author(id, 10L, "John", "Doe");
+        response = authorsAPI.createAuthor(request, authorRequest);
+        getScenarioContext().setResponse(response);
+        return response;
     }
 
     @When("I retrieve all authors")
@@ -38,14 +45,14 @@ public class AuthorsSteps extends BaseSteps {
         getScenarioContext().setResponse(response);
     }
 
-    @When("I retrieve the author with ID: {int}")
-    public void getAuthorById(int id) {
+    @When("I retrieve the author with ID: {long}")
+    public void getAuthorById(Long id) {
         response = authorsAPI.getAuthorById(request, id);
         getScenarioContext().setResponse(response);
     }
 
-    @When("I retrieve the authors by book ID: {int}")
-    public void getAuthorByBookId(int id) {
+    @When("I retrieve the authors by book ID: {long}")
+    public void getAuthorByBookId(Long id) {
         response = authorsAPI.getAuthorByBookId(request, id);
         getScenarioContext().setResponse(response);
     }
@@ -76,4 +83,19 @@ public class AuthorsSteps extends BaseSteps {
         verifyAuthorFieldsValues(author, id, bookId, firstName, lastName);
     }
 
+    @Given("^an author with ID (\\d+) (does not exist|exists)")
+    public void verifyAuthorExistence(Long id, String exists) {
+        response = authorsAPI.getAuthorById(request, id);
+        if (exists.equals("exists")) {
+            if (response.getStatusCode() != 200) {
+                response = createAuthorWithDefaultData(id);
+                CommonApiSteps.verifyResponseStatusCode(response, 200);
+            }
+        } else if (exists.equals("does not exist")) {
+            if (response.getStatusCode() == 200) {
+                response = authorsAPI.deleteAuthorById(request, id);
+                CommonApiSteps.verifyResponseStatusCode(response, 200);
+            }
+        }
+    }
 }

@@ -2,7 +2,6 @@ package com.avenga.cucumber;
 
 import com.avenga.api.BaseAPI;
 import com.avenga.config.ConfigProvider;
-import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 public class TestContext {

@@ -4,8 +4,6 @@ import io.restassured.response.Response;
 import org.junit.Assert;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class JSONHelper {
 

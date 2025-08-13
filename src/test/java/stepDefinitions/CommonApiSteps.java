@@ -1,4 +1,4 @@
-package com.avenga.stepDefinitions;
+package stepDefinitions;
 
 import com.avenga.api.AuthorsAPI;
 import com.avenga.api.BooksAPI;
@@ -26,11 +26,15 @@ public class CommonApiSteps extends BaseSteps {
         super(testContext);
     }
 
+    protected static void verifyResponseStatusCode(Response response, int statusCode){
+        int actualStatusCode = response.getStatusCode();
+        Assert.assertEquals("Status code value mismatch. | Expected: " + statusCode + " | Actual: " + actualStatusCode, statusCode, actualStatusCode);
+    }
+
     @Then("the response status code should be {int}")
     public void verifyResponseStatusCode(int statusCode) {
         response = getScenarioContext().getResponse();
-        int actualStatusCode = response.getStatusCode();
-        Assert.assertEquals("Status code value mismatch. | Expected: " + statusCode + " | Actual: " + actualStatusCode, statusCode, actualStatusCode);
+        verifyResponseStatusCode(response, statusCode);
     }
 
     @Then("the response should contain an error message with title: {string}")
@@ -45,7 +49,6 @@ public class CommonApiSteps extends BaseSteps {
         Assert.assertFalse("Error title is empty.", actualTitle.trim().isEmpty());
         Assert.assertEquals("Error title value mismatch.", expectedTitle, actualTitle);
     }
-
 
     @Then("^the response should contain a list of (books|authors)")
     public void verifyResponseContainsObjectList(String object) {

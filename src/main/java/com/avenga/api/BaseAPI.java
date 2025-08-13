@@ -16,5 +16,4 @@ public class BaseAPI {
     public RequestSpecification getRequest() {
         return request;
     }
-
 }

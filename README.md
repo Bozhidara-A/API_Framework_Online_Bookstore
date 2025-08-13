@@ -64,17 +64,17 @@ target/allure-results/
 ### Generate Allure Report (Optional)
 
 ```bash
-mvn allure serve 
+mvn allure:serve 
 ```
 ---
 ### Running the tests with configurations
 -  Using Command-Line Argument
 ```bash
-mvn test -Dbase.url=https://api.staging.example.com
+mvn test "-Dbase.url=https://example.net"
 ```
 - Using Environment Variable
 ```bash
-BASE_URL=https://api.prod.example.com mvn test
+$env:BASE_URL = "https://example.net"
 ```
 ---
 
@@ -107,8 +107,6 @@ docker run -e BASE_URL=https://api.example.com test-suite
 ```
 ---
 
----
-
 ## 🔁 CI/CD with GitHub Actions
 
 The workflow file is located at:
@@ -129,7 +127,7 @@ The workflow file is located at:
 After each run:
 
 1. Go to the **Actions** tab in GitHub
-2. Select the latest workflow run
-3. Download the `allure-report` artifact
+2. Select the latest workflow run - "pages build and deployment"
+3. Open the link from deploy phase
 
 ---

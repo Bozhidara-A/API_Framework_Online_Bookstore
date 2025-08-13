@@ -17,11 +17,5 @@ COPY . /app
 # Cache dependencies
 RUN mvn dependency:go-offline
 
-# Expose the port used by Allure's Jetty server
-EXPOSE 8080
-
-# Run tests and serve the Allure report
-RUN mvn clean test
-
-CMD ["allure", "generate", "target/allure-results", "-o", "target/allure-report"]
-
+# Default command: run tests and generate report
+CMD mvn clean test && allure generate target/allure-results -o target/allure-report

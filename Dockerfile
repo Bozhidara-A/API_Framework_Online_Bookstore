@@ -23,5 +23,5 @@ EXPOSE 8080
 # Run tests and serve the Allure report
 RUN mvn clean test
 
-# Serve the Allure report on 0.0.0.0 so Docker can expose it
-CMD ["allure", "serve", "target/allure-results", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["allure", "generate", "target/allure-results", "-o", "target/allure-report"]
+

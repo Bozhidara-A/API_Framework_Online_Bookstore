@@ -54,9 +54,7 @@ jobs:
 
       - name: Write test summary
         run: |
-          echo "### Test Summary" >> $GITHUB_STEP_SUMMARY
           echo "- 📊 [View Allure Report](https://bozhidara-a.github.io/API_Framework_Online_Bookstore/)" >> $GITHUB_STEP_SUMMARY
-
 
       - name: Cleanup Docker container
         run: docker rm test-container

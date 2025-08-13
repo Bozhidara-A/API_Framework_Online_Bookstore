@@ -22,7 +22,7 @@ Feature: Books
     Examples:
       | id  | title    | description      | page_count | excerpt | publish_date        |
       | 300 | New Book | Book description | 100        | test    | 2025-04-03T00:00:00 |
-#
+
   Scenario Outline: Create a book with invalid data
     When I create a book with ID: <id>, Title: <title>, Description: <description>, Page Count: <page_count>, Excerpt: <excerpt>, Publish Date: <publish_date>
     Then the response status code should be 400
@@ -31,11 +31,7 @@ Feature: Books
     Examples:
       | id          | title    | description        | page_count  | excerpt           | publish_date        | error_title                               | error_message                                                                                                             | path                     |
       | 12345678910 | New Book | Long ID Book       | 100         | test              | 2025-04-03T00:00:00 | "One or more validation errors occurred." | "The JSON value could not be converted to System.Int32. Path: $.id \| LineNumber: 0 \| BytePositionInLine: 17."           | "errors.'$.id'"          |
-      #| 300         | 1          | Wrong Title        | 100         | test              | 2025-04-03T00:00:00   | "One or more validation errors occurred." | "The JSON value could not be converted to System.String. Path: $.title \| LineNumber: 0 \| BytePositionInLine: 19."       | "errors.'$.title'"       |
-#      | 300         | New Book | 1                  | 100         | Wrong description | 2025-04-03T00:00:00 | One or more validation errors occurred. | The JSON value could not be converted to System.String. Path: $.description \| LineNumber: 0 \| BytePositionInLine: 44. | "errors.'$.description'" |
       | 300         | New Book | Long page count    | 12345678910 | test              | 2025-04-03T00:00:00 | "One or more validation errors occurred." | "The JSON value could not be converted to System.Int32. Path: $.pageCount \| LineNumber: 0 \| BytePositionInLine: 84."    | "errors.'$.pageCount'"   |
-#      | 300         | New Book | Wrong excerpt      | 100         | test              | 2025-04-03T00:00:00 | One or more validation errors occurred. | The JSON value could not be converted to System.String. Path: $.excerpt \| LineNumber: 0 \| BytePositionInLine: 86.     | "errors.'$.excerpt'"     |
-#      | 300         | New Book | Wrong publish date | 100         | test              | 6                   | One or more validation errors occurred. | The JSON value could not be converted to System.String. Path: $.publishDate \| LineNumber: 0 \| BytePositionInLine: 112.| "errors.'$.publishDate'" |
 
   Scenario Outline: Update a book with valid data
     When I update the book with ID: <id> with New ID: <new_id>, Title: <title>, Description: <description>, Page Count: <page_count>, Excerpt: <excerpt>, Publish Date: <publish_date>
@@ -44,7 +40,7 @@ Feature: Books
     Examples:
       | id  | new_id | title        | description      | page_count | excerpt | publish_date        |
       | 100 | 101    | Updated Book | Book Description | 100        | Update  | 2025-04-03T00:00:00 |
-#
+
   Scenario Outline: Update a book with invalid data
     When I update the book with ID: <id> with New ID: <new_id>, Title: "<title>", Description: "<description>", Page Count: <page_count>, Excerpt: "<excerpt>", Publish Date: "<publish_date>"
     Then the response status code should be 400

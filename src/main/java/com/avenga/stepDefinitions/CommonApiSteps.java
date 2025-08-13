@@ -34,11 +34,18 @@ public class CommonApiSteps extends BaseSteps {
     }
 
     @Then("the response should contain an error message with title: {string}")
-    public void verifyErrorTitle(String errorTitle) {
+    public void verifyErrorTitle(String expectedTitle) {
         response = getScenarioContext().getResponse();
+
+        Assert.assertTrue("Response does not contain a 'title' field.",
+                response.jsonPath().getMap("").containsKey("title"));
+
         String actualTitle = response.jsonPath().getString("title");
-        Assert.assertTrue("Error title value mismatch. | Expected: " + errorTitle + " | Actual: " + actualTitle, actualTitle.contains(errorTitle));
+        Assert.assertNotNull("Error title is null.", actualTitle);
+        Assert.assertFalse("Error title is empty.", actualTitle.trim().isEmpty());
+        Assert.assertEquals("Error title value mismatch.", expectedTitle, actualTitle);
     }
+
 
     @Then("^the response should contain a list of (books|authors)")
     public void verifyResponseContainsObjectList(String object) {

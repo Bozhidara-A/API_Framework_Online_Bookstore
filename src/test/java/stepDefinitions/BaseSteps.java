@@ -1,7 +1,7 @@
 package stepDefinitions;
 
-import com.avenga.cucumber.ScenarioContext;
-import com.avenga.cucumber.TestContext;
+import cucumber.ScenarioContext;
+import cucumber.TestContext;
 import io.restassured.specification.RequestSpecification;
 
 public abstract class BaseSteps {

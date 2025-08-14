@@ -1,4 +1,4 @@
-package com.avenga.cucumber;
+package cucumber;
 
 import com.avenga.api.BaseAPI;
 import com.avenga.config.ConfigProvider;

@@ -1,7 +1,7 @@
 package stepDefinitions;
 
 import com.avenga.api.AuthorsAPI;
-import com.avenga.cucumber.TestContext;
+import cucumber.TestContext;
 import com.avenga.models.Author;
 
 import io.cucumber.java.en.*;

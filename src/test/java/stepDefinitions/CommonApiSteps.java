@@ -2,7 +2,7 @@ package stepDefinitions;
 
 import com.avenga.api.AuthorsAPI;
 import com.avenga.api.BooksAPI;
-import com.avenga.cucumber.TestContext;
+import cucumber.TestContext;
 
 import com.avenga.helpers.JSONHelper;
 import com.avenga.models.Author;
@@ -88,14 +88,6 @@ public class CommonApiSteps extends BaseSteps {
             default:
                 throw new IllegalArgumentException("Unsupported object: " + object);
         }
-    }
-
-    @Then("the response body should be an empty array")
-    public void verifyEmptyBody() {
-        response = getScenarioContext().getResponse();
-        List<?> bodyAsList = response.getBody().jsonPath().getList("$");
-        Assert.assertNotNull("Response body is null", bodyAsList);
-        Assert.assertTrue("Expected empty array, but got: " + bodyAsList, bodyAsList.isEmpty());
     }
 
     @Then("the response should contain value: {string} at path: {string}")

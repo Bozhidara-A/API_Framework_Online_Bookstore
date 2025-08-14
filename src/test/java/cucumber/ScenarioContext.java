@@ -1,6 +1,6 @@
-package com.avenga.cucumber;
+package cucumber;
 
-import com.avenga.enums.Context;
+import enums.Context;
 import io.restassured.response.Response;
 
 import java.util.HashMap;

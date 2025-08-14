@@ -17,7 +17,7 @@ public class BooksAPI {
      * @return A string representing the full endpoint path for the book.
      */
     private static String bookById(long id) {
-        return ApiEndpoints.BOOKS + "/" + id;
+        return String.format("%s/%d", ApiEndpoints.BOOKS, id);
     }
 
     /**

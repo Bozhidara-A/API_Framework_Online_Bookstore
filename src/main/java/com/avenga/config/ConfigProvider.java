@@ -8,14 +8,14 @@ import java.util.Properties;
 
 public class ConfigProvider {
 
+    private static final String PROPERTY_FILE_PATH = "src/test/resources/config/config.properties";
     private final Properties properties;
     private static ConfigProvider configProvider;
 
     private ConfigProvider() {
         BufferedReader reader;
-        String propertyFilePath = "src/test/resources/config/config.properties";
         try {
-            reader = new BufferedReader(new FileReader(propertyFilePath));
+            reader = new BufferedReader(new FileReader(PROPERTY_FILE_PATH));
             properties = new Properties();
             try {
                 properties.load(reader);
@@ -25,7 +25,7 @@ public class ConfigProvider {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            throw new RuntimeException("Configuration.properties not found at " + propertyFilePath);
+            throw new RuntimeException("Configuration.properties not found at " + PROPERTY_FILE_PATH);
         }
     }
 

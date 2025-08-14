@@ -15,7 +15,7 @@ public class AuthorsAPI {
      * @return A string representing the full endpoint path for the author.
      */
     private static String authorById(long id) {
-        return ApiEndpoints.AUTHORS + "/" + id;
+        return String.format("%s/%d", ApiEndpoints.AUTHORS, id);
     }
 
     /**

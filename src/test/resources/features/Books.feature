@@ -44,7 +44,7 @@ Feature: Books
   Scenario Outline: Create a book with already existing ID
     Given a book with ID <id> exists
     When I create a book with ID: <id>, Title: <title>, Description: <description>, Page Count: <page_count>, Excerpt: <excerpt>, Publish Date: <publish_date>
-    Then the response status code should be 400
+    Then the response status code should be 409
     Examples:
       | id | title    | description      | page_count | excerpt | publish_date        |
       | 2  | New Book | Book description | 100        | test    | 2025-04-03T00:00:00 |
@@ -92,7 +92,7 @@ Feature: Books
     Given a book with ID <id> exists
     And a book with ID <new_id> exists
     When I update the book with ID: <id> with New ID: <new_id>, Title: <title>, Description: <description>, Page Count: <page_count>, Excerpt: <excerpt>, Publish Date: <publish_date>
-    Then the response status code should be 400
+    Then the response status code should be 409
     Examples:
       | id  | new_id | title        | description      | page_count | excerpt | publish_date        |
       | 2   | 3      | Updated Book | Book Description | 100        | Update  | 2025-04-03T00:00:00 |

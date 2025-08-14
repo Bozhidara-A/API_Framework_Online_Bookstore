@@ -44,8 +44,7 @@ Feature: Authors
   Scenario Outline: Retrieve an author by not existing book ID
     Given a book with ID <book_id> does not exist
     When I retrieve the authors by book ID: <book_id>
-    Then the response status code should be 200
-    And the response body should be an empty array
+    Then the response status code should be 404
     Examples:
       | book_id |
       | 400     |
@@ -72,7 +71,7 @@ Feature: Authors
   Scenario Outline: Create an author with already existing ID
     Given an author with ID <id> exists
     When I create an author with ID: <id>, Book ID: <book_id>, First Name: <first_name>, Last Name: <last_name>
-    Then the response status code should be 400
+    Then the response status code should be 409
     Examples:
       | id  | book_id | first_name | last_name |
       | 300 | 100     | "John"     | "Doe"     |
@@ -81,7 +80,7 @@ Feature: Authors
     Given an author with ID <id> does not exist
     And a book with ID <book_id> does not exist
     When I create an author with ID: <id>, Book ID: <book_id>, First Name: <first_name>, Last Name: <last_name>
-    Then the response status code should be 400
+    Then the response status code should be 404
     Examples:
       | id  | book_id | first_name | last_name |
       | 300 | 100     | "John"     | "Doe"     |
@@ -112,7 +111,7 @@ Feature: Authors
     And an author with ID <new_id> exists
     And a book with ID <book_id> exists
     When I update the author with ID: <id>, with New ID: <new_id>, Book ID: <book_id>, First Name: "<first_name>", Last Name: "<last_name>"
-    Then the response status code should be 400
+    Then the response status code should be 409
     Examples:
       | id  | new_id | book_id | first_name | last_name |
       | 10  | 12     | 100     | John       | Doe       |
@@ -122,7 +121,7 @@ Feature: Authors
     And an author with ID <new_id> does not exist
     And a book with ID <book_id> does not exist
     When I update the author with ID: <id>, with New ID: <new_id>, Book ID: <book_id>, First Name: "<first_name>", Last Name: "<last_name>"
-    Then the response status code should be 400
+    Then the response status code should be 404
     Examples:
       | id  | new_id | book_id | first_name | last_name |
       | 10  | 12     | 900     | John       | Doe       |
@@ -150,6 +149,7 @@ Feature: Authors
     Given an author with ID <id> does not exist
     When I delete the author with ID: <id>
     Then the response status code should be 404
+    And the response should contain an error message with title: "Not Found"
     Examples:
       | id  |
       | 400 |

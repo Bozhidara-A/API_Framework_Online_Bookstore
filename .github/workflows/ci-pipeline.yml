@@ -36,7 +36,7 @@ jobs:
           load: true
 
       - name: Run tests and generate Allure report
-        run: docker run --name test-container api-tests:latest
+        run: docker run --name test-container -e CI=true api-tests:latest
 
       - name: Copy Allure report from container
         run: docker cp test-container:/app/target/allure-report ./allure-report

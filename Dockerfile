@@ -8,14 +8,22 @@ RUN apt-get update && \
     unzip allure-2.24.0.zip -d /opt/ && \
     ln -s /opt/allure-2.24.0/bin/allure /usr/bin/allure
 
+# Install python3
+RUN apt-get update && apt-get install -y python3
+
 # Set working directory
 WORKDIR /app
-
-# Copy project files
+# Copy only Maven descriptor files first
+COPY pom.xml /app
+# Pre-fetch dependencies
+RUN mvn dependency:go-offline
+# Copy the rest of the project
 COPY . /app
 
-# Cache dependencies
-RUN mvn dependency:go-offline
+# Add entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Default command: run tests and generate report
-CMD mvn clean test || true && allure generate target/allure-results -o target/allure-report
+EXPOSE 8080
+
+ENTRYPOINT ["/entrypoint.sh"]

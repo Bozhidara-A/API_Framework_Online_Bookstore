@@ -89,11 +89,8 @@ docker build -t test-suite .
 ### 2. Run Tests in Container
 
 ```bash
-docker run -p 8080:8080 test-suite
+docker run test-suite
 ```
-
-### 3. Open report
-   Open http://localhost:8080/
 
 ---
 ### Running the tests with configurations
